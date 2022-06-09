@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "nlp1-rattrapage"
+version = "0.1.0"
+description = ""
+authors = ["Ibrahim Ouedraogo <brahim.oued@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+pandas = "^1.4.2"
+numpy = "^1.22.4"
+nltk = "^3.7"
+scipy = "^1.8.1"
+gensim = "^4.2.0"
+spacy = "^3.3.0"
+pyLDAvis = "^3.3.1"
+matplotlib = "^3.5.2"
+seaborn = "^0.11.2"
+ipykernel = "^6.13.0"
+PyPDF2 = "^2.1.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+autopep8 = "^1.6.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
