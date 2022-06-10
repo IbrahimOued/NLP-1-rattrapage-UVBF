@@ -14,7 +14,7 @@ Nous avons télécharger 'fr_core_news_md' qui est un modèle pré-formé de spa
 
 Le composant le plus intéressant du pipeline est le tagger qui attribue des balises Part-Of-Speech (POS) basées sur le modèle de langue française de SpaCy pour obtenir une variété d'annotations. Une balise POS (ou balise de partie du discours) est une étiquette spéciale attribuée à chaque jeton dans un corpus de texte pour indiquer le type de jeton (est-ce un adjectif ? Ponctuation ? Un verbe ? etc.) et souvent aussi d'autres catégories grammaticales tels que le temps, le nombre (pluriel/singulier), les symboles, etc. Les balises POS sont utilisées dans les recherches de corpus et les outils et algorithmes d'analyse dans le texte.
 
-1. **Suppression des tags non nécéssaire**
+2. **Suppression des tags non nécéssaire**
 
 Nous pouvons utiliser les balises Part Of Speech pour prétraiter les données en supprimant les tags indésirables. En supposant que nous voulions supprimer tous les chiffres de notre texte, nous pouvons alors pointer sur une balise spécifique et la supprimer.
 
@@ -34,3 +34,22 @@ A ce stage, nous sommes maintenant prêts à construire le corpus en utilisant l
 
 ### Partie 4 Création du modèle LDA
 
+L'étape suivante consiste à entraîner le modèle d'apprentissage automatique non supervisé sur les données. J'ai choisi de travailler avec le LdaMulticore, qui utilise tous les cœurs du processeur pour paralléliser et accélérer la formation des modèles. Si cela ne fonctionne pas pour vous pour une raison quelconque, essayez la classe `gensim.models.ldamodel.LdaModel` qui est une implémentation équivalente, mais plus simple et à un seul cœur.
+
+Lors de l'insertion de notre corpus dans l'algorithme de modélisation de sujet, le corpus est analysé afin de trouver la distribution des mots dans chaque sujet et la distribution des sujets dans chaque document.
+
+En entrée, nous donnons au modèle notre corpus et notre dictionnaire d'avant ; de plus, nous avons choisi d'itérer 50 fois sur le corpus pour optimiser les paramètres du modèle (c'est la valeur par défaut). Je sélectionne le nombre de sujets à dix et les travailleurs à 4 (trouvez le nombre de cœurs sur votre PC en appuyant sur les touches ctr+shift+esc). La réussite est de 10, ce qui signifie que le modèle traversera le corpus dix fois pendant l'entraînement.
+
+1. Quel est le nombre de sujets
+
+Après avoir formé le modèle, la prochaine étape naturelle consiste à l'évaluer. Après avoir construit les sujets, un score de cohérence peut être calculé. Le score mesure le degré de similarité sémantique entre les mots les mieux notés dans chaque sujet. De cette façon, un score de cohérence peut être calculé pour chaque itération en insérant un nombre variable de sujets.
+
+Une gamme d'algorithmes a été introduite pour calculer le score de cohérence ($C_v, C_p, C_{uci}, C_{umass}, C_{npmi}, C_a, \dots$). Travailler avec la bibliothèque gensim rend le calcul de ces mesures de cohérence pour les modèles thématiques assez simple. Personnellement, j'ai choisi d'implémenter $C_v$ et $C_{umass}$. Le score de cohérence pour $C_v$ va de 0 (incohérence complète) à 1 (cohérence complète). Les valeurs supérieures à $0,5$ sont assez bonnes, selon John McLevey (source : Doing Computational Social Science : A Practical Introduction By John McLevey). D'autre part, $C_{umass}$ renvoie des valeurs négatives.
+
+Pour les graphes  nous parcourons simplement un nombre différent de sujets et enregistrons le score de cohérence dans une liste. Ensuite, nous traçons en utilisant seaborn.
+
+Lorsque nous regardons les scores de cohérence en utilisant les algorithms $C_{umass}$ ou $C_v$ le meilleur est généralement le maximum. En regardant les graphes nous choisissons $10$ sujets.
+
+### Partie 5 Visualisation des topics
+
+Nous allons maintenant visualier les différents sujets et les mots associés. Le plotting dans le code represnte les 10 sujet les en cercle. Ils ont été obtenus en utilisant la méthode PCA de réduction de dimensionnalité. Le but est d'avoir une distance afin d'éviter les chevauchelents et de rendre chaque cercle unique. En survloant un cercle, différents mots sont affichés à droite en bleu et la fréquence estimée des termes dans le sujet sélectionné en rouge. LEs sujets les plus proches les uns des autres sont plus liés.
