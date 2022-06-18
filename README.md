@@ -1,5 +1,10 @@
 # NLP 1 rattrapage
+Membre du groupe:
+* OUEDRAOGO Ibrahim
+* ILBOUDO Aziz
 
+Lien vers le projet:
+[https://github.com/IbrahimOued/NLP-1-rattrapage-UVBF](https://github.com/IbrahimOued/NLP-1-rattrapage-UVBF)
 ## Partie 1 Collecte des donnees
 
 Le contenu des chaque document se fait en utilisant la librairie `PyPDF2`. Nous recherchons chaque fichier PDF pour en extraire le contenu et une fois ce contenu extrait, nous créeons un dataframe composé du nom du fichier et du contenu du fichier, plus précisement la dernière page.
@@ -53,3 +58,7 @@ Lorsque nous regardons les scores de cohérence en utilisant les algorithms $C_{
 ### Partie 5 Visualisation des topics
 
 Nous allons maintenant visualier les différents sujets et les mots associés. Le plotting dans le code represnte les 10 sujet les en cercle. Ils ont été obtenus en utilisant la méthode PCA de réduction de dimensionnalité. Le but est d'avoir une distance afin d'éviter les chevauchelents et de rendre chaque cercle unique. En survloant un cercle, différents mots sont affichés à droite en bleu et la fréquence estimée des termes dans le sujet sélectionné en rouge. LEs sujets les plus proches les uns des autres sont plus liés.
+
+### Partie 7 Construction du modèle avec TF-IDF
+
+Nous avons rajouté une étape intermédiaire pour extraire les termes les plus important en se basant sur TF-IDF. Nous avons défini un seuil de $0.005$ pour ignorer les termes qui apparaissent moins de $5%$ that appear in less than 1% of the documents
